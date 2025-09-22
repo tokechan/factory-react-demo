@@ -24,6 +24,7 @@ const Layout: React.FC = () => {
     { path: '/photos', label: '写真', icon: '📸' },
     { path: '/upload', label: 'アップロード', icon: '📤' },
     { path: '/stats', label: '統計', icon: '📊' },
+    { path: '/shares', label: '共有管理', icon: '🔗' },
   ];
 
   return (
