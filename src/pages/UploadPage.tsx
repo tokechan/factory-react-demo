@@ -8,6 +8,9 @@ import Button from '../components/Button';
 import FileDropZone from '../components/FileDropZone';
 import UploadProgress from '../components/UploadProgress';
 import UploadStats from '../components/UploadStats';
+import ImageProcessor from '../components/ImageProcessor';
+import ImagePreview from '../components/ImagePreview';
+import { validateImageFile } from '../utils/imageProcessing';
 import type { UsageStats } from '../types';
 
 const UploadPage: React.FC = () => {
@@ -22,9 +25,11 @@ const UploadPage: React.FC = () => {
     getStats,
   } = useFileUpload();
 
-  const { showError, showWarning } = useNotifications();
+  const { showError, showWarning, showSuccess } = useNotifications();
   const [usageStats, setUsageStats] = useState<UsageStats | null>(null);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [showImageProcessor, setShowImageProcessor] = useState(false);
 
   const stats = getStats();
 
@@ -52,8 +57,30 @@ const UploadPage: React.FC = () => {
       return;
     }
 
-    // Calculate total size of new files
-    const newFilesSize = Array.from(files).reduce((acc, file) => acc + file.size, 0);
+    // Validate files
+    const fileArray = Array.from(files);
+    const invalidFiles: string[] = [];
+    const validFiles: File[] = [];
+
+    fileArray.forEach(file => {
+      const validation = validateImageFile(file);
+      if (validation.valid) {
+        validFiles.push(file);
+      } else {
+        invalidFiles.push(`${file.name}: ${validation.error}`);
+      }
+    });
+
+    if (invalidFiles.length > 0) {
+      showError('無効なファイル', invalidFiles.join('\n'));
+    }
+
+    if (validFiles.length === 0) {
+      return;
+    }
+
+    // Calculate total size of valid files
+    const newFilesSize = validFiles.reduce((acc, file) => acc + file.size, 0);
     const newFilesSizeGB = newFilesSize / (1024 ** 3);
     
     // Check if adding these files would exceed quota
@@ -79,7 +106,17 @@ const UploadPage: React.FC = () => {
       );
     }
 
-    addFiles(files);
+    // Set files for processing preview
+    setSelectedFiles(validFiles);
+    
+    // Add to upload queue
+    const fileList = new DataTransfer();
+    validFiles.forEach(file => fileList.items.add(file));
+    addFiles(fileList.files);
+
+    if (validFiles.length > 0) {
+      showSuccess(`${validFiles.length}個のファイルが選択されました`);
+    }
   };
 
   const handleRetryUpload = (id: string) => {
@@ -90,6 +127,15 @@ const UploadPage: React.FC = () => {
       // For now, we'll just show a message
       showWarning('再試行機能は開発中です');
     }
+  };
+
+  const handleImageProcessingComplete = (results: any[]) => {
+    showSuccess(`${results.length}個の画像処理が完了しました`);
+    // In a real app, processed images would be uploaded to different storage tiers
+  };
+
+  const handleRemoveSelectedFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const quotaPercentage = usageStats?.quota_percentage || 0;
@@ -133,6 +179,46 @@ const UploadPage: React.FC = () => {
             disabled={isUploading || isLoadingStats}
             className="h-48"
           />
+
+          {/* Image Preview Section */}
+          {selectedFiles.length > 0 && (
+            <Card title="📸 選択された画像">
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <p className="text-sm text-gray-600">
+                    {selectedFiles.length}個のファイルが選択されています
+                  </p>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setShowImageProcessor(!showImageProcessor)}
+                  >
+                    {showImageProcessor ? '🔧 処理を隠す' : '🔧 画像処理'}
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {selectedFiles.map((file, index) => (
+                    <ImagePreview
+                      key={`${file.name}-${index}`}
+                      file={file}
+                      onRemove={() => handleRemoveSelectedFile(index)}
+                      showMetadata={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Image Processing */}
+          {showImageProcessor && selectedFiles.length > 0 && (
+            <ImageProcessor
+              files={selectedFiles}
+              onProcessingComplete={handleImageProcessingComplete}
+              onError={(error) => showError('画像処理エラー', error)}
+            />
+          )}
 
           {/* Upload Controls */}
           {uploadQueue.length > 0 && (
@@ -254,23 +340,30 @@ const UploadPage: React.FC = () => {
           <Card title="💡 Tips">
             <div className="space-y-3 text-sm">
               <div className="p-3 bg-blue-50 rounded">
-                <strong className="text-blue-900">自動処理</strong>
+                <strong className="text-blue-900">画像処理機能</strong>
                 <p className="text-blue-800 mt-1">
-                  アップロード後、サムネイルと中サイズ画像が自動生成されます
+                  選択した画像の処理・最適化・サムネイル生成をローカルで実行
                 </p>
               </div>
               
               <div className="p-3 bg-green-50 rounded">
-                <strong className="text-green-900">コスト最適化</strong>
+                <strong className="text-green-900">自動最適化</strong>
                 <p className="text-green-800 mt-1">
-                  30日後に自動的にアーカイブ保存に移行してコストを削減
+                  WebP形式での圧縮により、ファイルサイズを大幅に削減
                 </p>
               </div>
               
               <div className="p-3 bg-purple-50 rounded">
                 <strong className="text-purple-900">EXIF データ</strong>
                 <p className="text-purple-800 mt-1">
-                  撮影日時、カメラ情報、位置情報が自動的に抽出・保存されます
+                  撮影日時、カメラ情報、位置情報が自動的に抽出・表示されます
+                </p>
+              </div>
+              
+              <div className="p-3 bg-yellow-50 rounded">
+                <strong className="text-yellow-900">コスト最適化</strong>
+                <p className="text-yellow-800 mt-1">
+                  30日後に自動的にアーカイブ保存に移行してコストを削減
                 </p>
               </div>
             </div>
