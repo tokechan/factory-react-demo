@@ -32,7 +32,7 @@ const PhotosPage: React.FC = () => {
   // Load photos
   useEffect(() => {
     loadPhotos();
-  }, [searchParams]);
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadPhotos = async () => {
     setIsLoading(true);

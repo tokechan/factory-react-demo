@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotifications } from './useNotifications';
 import { apiClient } from '../utils/api';
-import type { FileUploadItem, UploadProgress } from '../types';
+import type { FileUploadItem } from '../types';
 
 export const useFileUpload = () => {
   const [uploadQueue, setUploadQueue] = useState<FileUploadItem[]>([]);

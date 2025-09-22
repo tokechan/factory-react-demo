@@ -14,8 +14,6 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import { format } from 'date-fns';
-import { ja } from 'date-fns/locale';
 import Card from './Card';
 import StatCard from './StatCard';
 
@@ -24,6 +22,7 @@ interface CostBreakdown {
   cost_usd: number;
   color: string;
   description: string;
+  [key: string]: string | number; // Add index signature for Recharts compatibility
 }
 
 interface MonthlyCostData {

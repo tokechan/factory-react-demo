@@ -4,13 +4,10 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   LineChart,
   Line,
   Area,
@@ -25,6 +22,7 @@ interface StorageBreakdown {
   value: number;
   color: string;
   percentage: number;
+  [key: string]: string | number; // Add index signature for Recharts compatibility
 }
 
 interface StorageUsageData {

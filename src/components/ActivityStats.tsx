@@ -13,7 +13,7 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Card from './Card';
 import StatCard from './StatCard';

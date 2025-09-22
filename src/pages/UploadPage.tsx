@@ -86,12 +86,6 @@ const UploadPage: React.FC = () => {
     // Find the failed item and add it back to queue
     const item = uploadQueue.find(item => item.id === id);
     if (item) {
-      // Reset the item status and progress
-      const updatedQueue = uploadQueue.map(queueItem =>
-        queueItem.id === id
-          ? { ...queueItem, status: 'queued' as const, progress: 0, error: undefined }
-          : queueItem
-      );
       // This would typically be handled by the upload hook
       // For now, we'll just show a message
       showWarning('再試行機能は開発中です');

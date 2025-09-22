@@ -20,7 +20,7 @@ const StatsPage: React.FC = () => {
   // Load statistics data
   useEffect(() => {
     loadStats();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadStats = async () => {
     setIsLoading(true);

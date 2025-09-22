@@ -19,7 +19,7 @@ const PhotoFilters: React.FC<PhotoFiltersProps> = ({
     search: '',
     date_from: '',
     date_to: '',
-    storage_class: '',
+    storage_class: undefined,
     sort_by: 'upload_date',
     sort_order: 'desc',
   });
@@ -48,7 +48,7 @@ const PhotoFilters: React.FC<PhotoFiltersProps> = ({
       search: '',
       date_from: '',
       date_to: '',
-      storage_class: '',
+      storage_class: undefined,
       sort_by: 'upload_date',
       sort_order: 'desc',
     };
@@ -131,7 +131,7 @@ const PhotoFilters: React.FC<PhotoFiltersProps> = ({
             </label>
             <select
               value={filters.storage_class || ''}
-              onChange={(e) => handleFilterChange('storage_class', e.target.value)}
+              onChange={(e) => handleFilterChange('storage_class', e.target.value || undefined)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">すべて</option>

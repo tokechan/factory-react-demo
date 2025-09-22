@@ -3,7 +3,6 @@ import type {
   AuthResponse,
   LoginRequest,
   RegisterRequest,
-  APIResponse,
   PhotoListResponse,
   PhotoSearchParams,
   Photo,
@@ -236,12 +235,6 @@ let mockPhotos: Photo[] = [
 
 let currentUser: User | null = null;
 
-// Mock tokens
-let mockTokens = {
-  accessToken: '',
-  refreshToken: '',
-};
-
 // Generate mock JWT-like token
 const generateMockToken = (payload: any): string => {
   const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
@@ -274,8 +267,6 @@ export class MockApiClient {
     
     const accessToken = generateMockToken({ sub: user.id, email: user.email });
     const refreshToken = generateMockToken({ sub: user.id, email: user.email, type: 'refresh' });
-    
-    mockTokens = { accessToken, refreshToken };
     
     // Store in localStorage
     localStorage.setItem('access_token', accessToken);
@@ -316,8 +307,6 @@ export class MockApiClient {
     const accessToken = generateMockToken({ sub: newUser.id, email: newUser.email });
     const refreshToken = generateMockToken({ sub: newUser.id, email: newUser.email, type: 'refresh' });
     
-    mockTokens = { accessToken, refreshToken };
-    
     // Store in localStorage
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('refresh_token', refreshToken);
@@ -333,7 +322,6 @@ export class MockApiClient {
   async logout(): Promise<void> {
     await delay(200);
     currentUser = null;
-    mockTokens = { accessToken: '', refreshToken: '' };
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
   }
