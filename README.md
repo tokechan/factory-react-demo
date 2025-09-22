@@ -1,6 +1,18 @@
-# Getting Started with Create React App
+# Photo Archive System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Cloudflare R2 + Workers/Hono + React を使用した写真アーカイブシステムです。
+
+## プロジェクト構成
+
+- **Frontend**: React アプリケーション (src/)
+- **API**: Cloudflare Workers + Hono (api/)
+- **Docs**: システム設計書 (Docs/)
+
+## 開発環境セットアップ
+
+### フロントエンド (React)
+
+Create React App をベースとしたフロントエンドアプリケーション。
 
 ## Available Scripts
 
@@ -38,6 +50,37 @@ If you aren't satisfied with the build tool and configuration choices, you can `
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+### API (Cloudflare Workers)
+
+```bash
+cd api
+npm install
+npm run dev  # ローカル開発サーバー
+```
+
+詳細は [api/README.md](./api/README.md) を参照してください。
+
+## システム設計
+
+設計書は [Docs/photo-archive-system-design.md](./Docs/photo-archive-system-design.md) に詳細があります。
+
+### 主要機能
+
+- 📸 写真アップロード（マルチパート対応）
+- 🎯 自動サムネイル・中サイズ生成
+- 🗃️ 30日後の自動IA移行（コスト最適化）
+- 📊 使用量・コストダッシュボード
+- 🔍 日付・メタデータ検索
+- ⚡ モバイルファーストUI
+
+### 技術スタック
+
+- **Frontend**: React 18 + TypeScript
+- **API**: Cloudflare Workers + Hono
+- **Storage**: Cloudflare R2 (S3互換)
+- **Database**: Cloudflare D1 (SQLite)
+- **Cache**: Cloudflare KV
 
 ## Learn More
 

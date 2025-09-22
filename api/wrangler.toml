@@ -1,0 +1,43 @@
+name = "photo-archive-api"
+compatibility_date = "2024-09-22"
+main = "src/index.ts"
+
+# Workers Settings
+workers_dev = true
+node_compat = true
+
+# Environment Variables
+[env.production]
+name = "photo-archive-api-prod"
+
+[env.staging]
+name = "photo-archive-api-staging"
+
+# R2 Bucket Bindings
+[[r2_buckets]]
+binding = "PHOTO_BUCKET"
+bucket_name = "photo-archive-bucket"
+preview_bucket_name = "photo-archive-bucket-dev"
+
+# D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "photo-archive-db"
+database_id = "your-database-id"
+preview_database_id = "your-preview-database-id"
+
+# KV Namespace Bindings
+[[kv_namespaces]]
+binding = "CACHE"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+# Variables
+[vars]
+ENVIRONMENT = "development"
+JWT_SECRET = "your-jwt-secret-key-here"
+CORS_ORIGINS = "http://localhost:3000,https://yourdomain.com"
+
+# Limits
+[limits]
+cpu_ms = 30000
