@@ -26,7 +26,7 @@ const PhotoFilters: React.FC<PhotoFiltersProps> = ({
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleFilterChange = (key: keyof PhotoSearchParams, value: string) => {
+  const handleFilterChange = (key: keyof PhotoSearchParams, value: string | undefined) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
