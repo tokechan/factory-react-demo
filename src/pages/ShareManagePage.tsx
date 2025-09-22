@@ -4,7 +4,6 @@ import { useSharing } from '../hooks/useSharing';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { formatShareInfo } from '../utils/sharing';
-import { formatFileSize } from '../utils/api';
 
 const ShareManagePage: React.FC = () => {
   const {

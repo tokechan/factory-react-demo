@@ -55,6 +55,8 @@
     ]
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/qrcode": "^1.5.5",
     "@types/react-router-dom": "^5.3.3"
   }
 }

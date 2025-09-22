@@ -12,7 +12,6 @@ import {
   deactivateShareLink,
   copyToClipboard,
   shareViaWebShareAPI,
-  formatShareInfo,
 } from '../utils/sharing';
 
 interface SharingContextType {

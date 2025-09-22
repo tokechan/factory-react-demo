@@ -29,6 +29,7 @@ export interface RegisterRequest {
 export interface Photo {
   id: string;
   filename: string;
+  name: string; // Display name for the photo
   file_size: number;
   content_type: string;
   upload_date: string;
@@ -45,6 +46,22 @@ export interface Photo {
   thumb_url?: string;
   medium_url?: string;
   original_url?: string;
+  // Share-related properties for compatibility
+  size?: number;
+  width?: number;
+  height?: number;
+  url?: string;
+  allowDownload?: boolean;
+  allowZoom?: boolean;
+  watermark?: boolean;
+  taken_at?: string;
+  metadata?: {
+    exif?: Record<string, any>;
+    location?: {
+      latitude: number;
+      longitude: number;
+    };
+  };
 }
 
 export interface PhotoListResponse {
