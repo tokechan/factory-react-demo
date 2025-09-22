@@ -13,9 +13,11 @@ import type {
   CostDashboard,
   User,
 } from '../types';
+import { mockApiClient } from './mockApi';
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8787';
+const USE_MOCK_API = process.env.REACT_APP_USE_MOCK_API === 'true' || !process.env.REACT_APP_API_URL;
 
 class ApiClient {
   private client: AxiosInstance;
@@ -91,6 +93,12 @@ class ApiClient {
 
   // Authentication methods
   async login(credentials: LoginRequest): Promise<AuthResponse> {
+    if (USE_MOCK_API) {
+      const authData = await mockApiClient.login(credentials);
+      this.saveTokensToStorage(authData.access_token, authData.refresh_token);
+      return authData;
+    }
+
     const response = await this.client.post<APIResponse<AuthResponse>>('/api/auth/login', credentials);
     
     if (response.data.success && response.data.data) {
@@ -103,6 +111,12 @@ class ApiClient {
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
+    if (USE_MOCK_API) {
+      const authData = await mockApiClient.register(userData);
+      this.saveTokensToStorage(authData.access_token, authData.refresh_token);
+      return authData;
+    }
+
     const response = await this.client.post<APIResponse<AuthResponse>>('/api/auth/register', userData);
     
     if (response.data.success && response.data.data) {
@@ -115,6 +129,12 @@ class ApiClient {
   }
 
   async logout(): Promise<void> {
+    if (USE_MOCK_API) {
+      await mockApiClient.logout();
+      this.clearTokens();
+      return;
+    }
+
     try {
       await this.client.post('/api/auth/logout');
     } finally {
@@ -140,6 +160,10 @@ class ApiClient {
   }
 
   async getCurrentUser(): Promise<User> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.getCurrentUser();
+    }
+
     const response = await this.client.get<APIResponse<User>>('/api/auth/me');
     
     if (response.data.success && response.data.data) {
@@ -151,6 +175,10 @@ class ApiClient {
 
   // Photo management methods
   async getPhotos(params: PhotoSearchParams = {}): Promise<PhotoListResponse> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.getPhotos(params);
+    }
+
     const response = await this.client.get<APIResponse<PhotoListResponse>>('/api/photos', { params });
     
     if (response.data.success && response.data.data) {
@@ -206,6 +234,10 @@ class ApiClient {
 
   // Upload methods
   async getPresignedUploadUrl(uploadRequest: UploadRequest): Promise<PresignedUrlResponse> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.getPresignedUploadUrl(uploadRequest);
+    }
+
     const response = await this.client.post<APIResponse<PresignedUrlResponse>>('/api/upload/presign', uploadRequest);
     
     if (response.data.success && response.data.data) {
@@ -216,6 +248,10 @@ class ApiClient {
   }
 
   async uploadFile(presignedUrl: string, file: File, onProgress?: (progress: number) => void): Promise<string> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.uploadFile(presignedUrl, file, onProgress);
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -235,6 +271,10 @@ class ApiClient {
   }
 
   async completeUpload(photoId: string, etag: string, actualSize: number): Promise<void> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.completeUpload(photoId, etag, actualSize);
+    }
+
     const response = await this.client.post<APIResponse>('/api/upload/complete', {
       photo_id: photoId,
       etag,
@@ -263,6 +303,10 @@ class ApiClient {
 
   // Statistics methods
   async getUsageStats(): Promise<UsageStats> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.getUsageStats();
+    }
+
     const response = await this.client.get<APIResponse<UsageStats>>('/api/stats/usage');
     
     if (response.data.success && response.data.data) {
@@ -273,6 +317,10 @@ class ApiClient {
   }
 
   async getCostDashboard(): Promise<CostDashboard> {
+    if (USE_MOCK_API) {
+      return await mockApiClient.getCostDashboard();
+    }
+
     const response = await this.client.get<APIResponse<CostDashboard>>('/api/stats/cost');
     
     if (response.data.success && response.data.data) {
@@ -300,6 +348,9 @@ class ApiClient {
 
   // Utility methods
   isAuthenticated(): boolean {
+    if (USE_MOCK_API) {
+      return mockApiClient.isAuthenticated();
+    }
     return !!this.accessToken;
   }
 

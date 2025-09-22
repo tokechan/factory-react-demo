@@ -5,6 +5,7 @@ import { useNotifications } from '../hooks/useNotifications';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Card from '../components/Card';
+import DevModeInfo from '../components/DevModeInfo';
 import type { LoginFormData } from '../types';
 
 const LoginPage: React.FC = () => {
@@ -95,6 +96,9 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Development Mode Info */}
+        <DevModeInfo />
+        
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
