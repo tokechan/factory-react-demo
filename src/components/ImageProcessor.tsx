@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { clsx } from 'clsx';
 import Button from './Button';
 import Card from './Card';
 import {
   processImageForUpload,
   validateImageFile,
   getCompressionRatio,
-  estimateProcessingTime,
   createPreviewUrl,
   downloadProcessedImage,
   type ImageMetadata,

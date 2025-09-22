@@ -80,7 +80,7 @@ export const loadImageFromFile = (file: File): Promise<HTMLImageElement> => {
  */
 export const extractExifData = (file: File): Promise<any> => {
   return new Promise((resolve) => {
-    EXIF.getData(file as any, function() {
+    EXIF.getData(file as any, function(this: any) {
       const exifData = EXIF.getAllTags(this);
       resolve(exifData);
     });

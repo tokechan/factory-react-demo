@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { clsx } from 'clsx';
-import Button from './Button';
 import { createPreviewUrl, getImageMetadata, type ImageMetadata } from '../utils/imageProcessing';
 import { formatFileSize } from '../utils/api';
 
@@ -53,7 +52,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         URL.revokeObjectURL(previewUrl);
       }
     };
-  }, [file, showMetadata]);
+  }, [file, showMetadata, previewUrl]);
 
   const handleImageClick = useCallback(() => {
     if (previewUrl) {
