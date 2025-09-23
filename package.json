@@ -14,10 +14,13 @@
     "axios": "^1.12.2",
     "canvas": "^3.2.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "exif-js": "^2.3.0",
     "file-saver": "^2.0.5",
     "lucide-react": "^0.544.0",
+    "nanoid": "^5.1.6",
+    "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
@@ -52,6 +55,8 @@
     ]
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/qrcode": "^1.5.5",
     "@types/react-router-dom": "^5.3.3"
   }
 }

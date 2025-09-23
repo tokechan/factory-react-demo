@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { formatFileSize } from '../utils/api';
 import Button from './Button';
+import ShareDialog from './ShareDialog';
 import type { Photo } from '../types';
 
 interface PhotoModalProps {
@@ -23,6 +24,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
   const [imageError, setImageError] = useState(false);
   const [showOriginalWarning, setShowOriginalWarning] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   // Reset state when modal opens/closes
   useEffect(() => {
@@ -250,6 +252,14 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
                   {photo.storage_class === 'IA' ? '⚠️ 原本を表示 (課金対象)' : '🔍 原本を表示'}
                 </Button>
 
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setShowShareDialog(true)}
+                >
+                  🔗 共有
+                </Button>
+
                 {onDownload && (
                   <Button
                     variant="secondary"
@@ -307,6 +317,15 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
               </div>
             </div>
           </div>
+        )}
+
+        {/* Share Dialog */}
+        {photo && (
+          <ShareDialog
+            photo={photo}
+            isOpen={showShareDialog}
+            onClose={() => setShowShareDialog(false)}
+          />
         )}
       </div>
     </div>
