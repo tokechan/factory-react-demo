@@ -42,7 +42,8 @@ const encryptText = async (text: string, password: string): Promise<string> => {
   result.set(iv);
   result.set(new Uint8Array(encrypted), iv.length);
   
-  return btoa(String.fromCharCode(...result));
+  const resultArray = Array.from(result);
+  return btoa(String.fromCharCode.apply(null, resultArray as any));
 };
 
 const decryptText = async (encryptedText: string, password: string): Promise<string> => {
