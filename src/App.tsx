@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './hooks/useAuth';
 import { NotificationProvider } from './hooks/useNotifications';
 import { SharingProvider } from './hooks/useSharing';
+import { AlertProvider } from './hooks/useAlerts';
 
 // Pages (will be created next)
 import LoginPage from './pages/LoginPage';
@@ -13,6 +14,7 @@ import UploadPage from './pages/UploadPage';
 import StatsPage from './pages/StatsPage';
 import ShareViewPage from './pages/ShareViewPage';
 import ShareManagePage from './pages/ShareManagePage';
+import AlertsPage from './pages/AlertsPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -23,7 +25,8 @@ function App() {
     <NotificationProvider>
       <AuthProvider>
         <SharingProvider>
-          <Router>
+          <AlertProvider>
+            <Router>
             <div className="App">
               <Routes>
                 {/* Public routes */}
@@ -41,13 +44,15 @@ function App() {
                   <Route path="upload" element={<UploadPage />} />
                   <Route path="stats" element={<StatsPage />} />
                   <Route path="shares" element={<ShareManagePage />} />
+                  <Route path="alerts" element={<AlertsPage />} />
                 </Route>
                 
                 {/* Catch all route */}
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Routes>
             </div>
-          </Router>
+            </Router>
+          </AlertProvider>
         </SharingProvider>
       </AuthProvider>
     </NotificationProvider>

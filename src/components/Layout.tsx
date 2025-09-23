@@ -2,12 +2,17 @@ import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useNotifications } from '../hooks/useNotifications';
+import { useSystemMetrics } from '../hooks/useSystemMetrics';
 import Button from './Button';
+import AlertBanner from './AlertBanner';
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const { showSuccess } = useNotifications();
   const navigate = useNavigate();
+  
+  // Initialize system metrics collection
+  useSystemMetrics();
 
   const handleLogout = async () => {
     try {
@@ -25,6 +30,7 @@ const Layout: React.FC = () => {
     { path: '/upload', label: 'アップロード', icon: '📤' },
     { path: '/stats', label: '統計', icon: '📊' },
     { path: '/shares', label: '共有管理', icon: '🔗' },
+    { path: '/alerts', label: 'アラート', icon: '⚠️' },
   ];
 
   return (
@@ -102,6 +108,9 @@ const Layout: React.FC = () => {
 
       {/* Main content */}
       <main className="container mx-auto py-6">
+        {/* Alert Banner */}
+        <AlertBanner />
+        
         <Outlet />
       </main>
     </div>
