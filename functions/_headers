@@ -1,0 +1,19 @@
+# Security headers for Cloudflare Pages
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://photo-archive-api.fleatoke.workers.dev
+
+# Static assets cache headers
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Service Worker cache
+/service-worker.js
+  Cache-Control: no-cache
+
+# API routes cache
+/api/*
+  Cache-Control: no-cache, no-store, must-revalidate

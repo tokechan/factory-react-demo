@@ -4,7 +4,7 @@ main = "src/index.ts"
 
 # Workers Settings
 workers_dev = true
-node_compat = true
+compatibility_flags = ["nodejs_compat"]
 
 # Environment Variables
 [env.production]
@@ -16,28 +16,28 @@ name = "photo-archive-api-staging"
 # R2 Bucket Bindings
 [[r2_buckets]]
 binding = "PHOTO_BUCKET"
-bucket_name = "photo-archive-bucket"
+bucket_name = "photo-archive-bucket-prod"
 preview_bucket_name = "photo-archive-bucket-dev"
 
 # D1 Database Binding
 [[d1_databases]]
 binding = "DB"
-database_name = "photo-archive-db"
-database_id = "your-database-id"
-preview_database_id = "your-preview-database-id"
+database_name = "photo-archive-db-prod"
+database_id = "fcd88226-56f4-4e89-aca8-153deb24e067"
+preview_database_id = "a67c7549-4cc3-4cde-9559-ebcf10f71db6"
 
 # KV Namespace Bindings
 [[kv_namespaces]]
 binding = "CACHE"
-id = "your-kv-namespace-id"
-preview_id = "your-preview-kv-namespace-id"
+id = "876b4063f0cc41d296aa533fe2a151e3"
+preview_id = "c1dc0e8060cc42f18c2e242673dc2fe6"
 
 # Variables
 [vars]
 ENVIRONMENT = "development"
-JWT_SECRET = "your-jwt-secret-key-here"
-CORS_ORIGINS = "http://localhost:3000,https://yourdomain.com"
+JWT_SECRET = "a0a321a504b79855888e5350505d9103680925177a49f66e0944c5ffd716c1e1"
+CORS_ORIGINS = "http://localhost:3000,http://localhost:3005"
 
-# Limits
-[limits]
-cpu_ms = 30000
+# Limits (removed cpu_ms for free plan compatibility)
+# [limits]
+# cpu_ms = 30000

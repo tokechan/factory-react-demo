@@ -1,0 +1,12 @@
+# Cloudflare Pages Redirects for React Router
+# Single Page Application (SPA) redirect
+/* /index.html 200
+
+# API proxy (optional - can be useful for development)
+/api/* https://photo-archive-api.fleatoke.workers.dev/:splat 200
+
+# Security headers
+/static/* https://your-domain.com/static/:splat 200
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
