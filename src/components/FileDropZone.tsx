@@ -27,7 +27,6 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     
     if (disabled) return;
     
-    setDragCounter(prev => prev + 1);
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
       setIsDragOver(true);
     }
@@ -39,13 +38,8 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     
     if (disabled) return;
     
-    setDragCounter(prev => {
-      const newCounter = prev - 1;
-      if (newCounter === 0) {
-        setIsDragOver(false);
-      }
-      return newCounter;
-    });
+    // Simple drag leave handling
+    setIsDragOver(false);
   }, [disabled]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -60,7 +54,6 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     if (disabled) return;
     
     setIsDragOver(false);
-    setDragCounter(0);
     
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
