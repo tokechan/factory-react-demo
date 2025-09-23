@@ -180,6 +180,28 @@ const ShareViewPage: React.FC = () => {
   // Successfully accessed - show photo
   const photo = access.photoData;
 
+  if (!photo) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <div className="text-center py-8">
+            <div className="text-6xl mb-4">❌</div>
+            <h2 className="text-xl font-medium text-gray-900 mb-2">データエラー</h2>
+            <p className="text-gray-600 mb-4">
+              写真データの取得に失敗しました。
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => window.location.href = '/'}
+            >
+              ホームページに戻る
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -343,7 +365,7 @@ const ShareViewPage: React.FC = () => {
                 </div>
 
                 {/* EXIF Data */}
-                {photo.metadata?.exif && (
+                {photo.metadata?.exif && Object.keys(photo.metadata.exif).length > 0 && (
                   <details className="mt-4">
                     <summary className="cursor-pointer text-gray-700 hover:text-gray-900 font-medium">
                       📋 撮影情報 (EXIF)
