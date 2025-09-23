@@ -162,7 +162,7 @@ export const SharingProvider: React.FC<SharingProviderProps> = ({ children }) =>
       };
     }
 
-    const access = validateShareAccess(shareLink, password);
+    const access = await validateShareAccess(shareLink, password);
     
     if (access.success) {
       // Increment view count

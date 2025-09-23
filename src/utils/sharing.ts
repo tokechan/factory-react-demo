@@ -1,7 +1,104 @@
 // Sharing utilities for secure URL generation and access control
-import CryptoJS from 'crypto-js';
 import { nanoid } from 'nanoid';
-import QRCode from 'qrcode';
+
+// Simple encryption using Web Crypto API as fallback
+const encryptText = async (text: string, password: string): Promise<string> => {
+  if (typeof window === 'undefined' || !window.crypto?.subtle) {
+    // Fallback: Base64 encoding for development (NOT secure for production)
+    return btoa(text);
+  }
+  
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const passwordKey = await window.crypto.subtle.importKey(
+    'raw',
+    encoder.encode(password),
+    { name: 'PBKDF2' },
+    false,
+    ['deriveKey']
+  );
+  
+  const key = await window.crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: encoder.encode('salt'),
+      iterations: 100000,
+      hash: 'SHA-256',
+    },
+    passwordKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt']
+  );
+  
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await window.crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    data
+  );
+  
+  const result = new Uint8Array(iv.length + encrypted.byteLength);
+  result.set(iv);
+  result.set(new Uint8Array(encrypted), iv.length);
+  
+  return btoa(String.fromCharCode(...result));
+};
+
+const decryptText = async (encryptedText: string, password: string): Promise<string> => {
+  if (typeof window === 'undefined' || !window.crypto?.subtle) {
+    // Fallback: Base64 decoding for development
+    return atob(encryptedText);
+  }
+  
+  try {
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const data = new Uint8Array(atob(encryptedText).split('').map(c => c.charCodeAt(0)));
+    
+    const passwordKey = await window.crypto.subtle.importKey(
+      'raw',
+      encoder.encode(password),
+      { name: 'PBKDF2' },
+      false,
+      ['deriveKey']
+    );
+    
+    const key = await window.crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt: encoder.encode('salt'),
+        iterations: 100000,
+        hash: 'SHA-256',
+      },
+      passwordKey,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt']
+    );
+    
+    const iv = data.slice(0, 12);
+    const encrypted = data.slice(12);
+    
+    const decrypted = await window.crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      encrypted
+    );
+    
+    return decoder.decode(decrypted);
+  } catch (error) {
+    throw new Error('Decryption failed');
+  }
+};
+
+// Simple QR code generation using a service
+const generateQRCode = async (text: string): Promise<string> => {
+  // Using QR Server API as fallback
+  const size = 200;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+  return qrUrl;
+};
 
 export interface ShareOptions {
   password?: string;
@@ -55,20 +152,19 @@ export const generateShareId = (): string => {
 /**
  * Encrypt photo data for secure sharing
  */
-export const encryptPhotoData = (photoData: Record<string, any>, password?: string): string => {
+export const encryptPhotoData = async (photoData: Record<string, any>, password?: string): Promise<string> => {
   const dataString = JSON.stringify(photoData);
-  const key = password ? CryptoJS.SHA256(password).toString() : ENCRYPTION_KEY;
-  return CryptoJS.AES.encrypt(dataString, key).toString();
+  const key = password || ENCRYPTION_KEY;
+  return await encryptText(dataString, key);
 };
 
 /**
  * Decrypt photo data for access
  */
-export const decryptPhotoData = (encryptedData: string, password?: string): Record<string, any> => {
+export const decryptPhotoData = async (encryptedData: string, password?: string): Promise<Record<string, any>> => {
   try {
-    const key = password ? CryptoJS.SHA256(password).toString() : ENCRYPTION_KEY;
-    const bytes = CryptoJS.AES.decrypt(encryptedData, key);
-    const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+    const key = password || ENCRYPTION_KEY;
+    const decryptedString = await decryptText(encryptedData, key);
     return JSON.parse(decryptedString);
   } catch (error) {
     throw new Error('Failed to decrypt photo data. Invalid password or corrupted data.');
@@ -88,7 +184,7 @@ export const createShareLink = async (
   const shareToken = generateShareToken();
   
   // Encrypt photo data
-  const encryptedUrl = encryptPhotoData(photoData, options.password);
+  const encryptedUrl = await encryptPhotoData(photoData, options.password);
   
   // Generate public URL
   const baseUrl = (typeof window !== 'undefined' && window.location) 
@@ -99,14 +195,7 @@ export const createShareLink = async (
   // Generate QR code
   let qrCodeUrl: string | undefined;
   try {
-    qrCodeUrl = await QRCode.toDataURL(publicUrl, {
-      width: 200,
-      margin: 2,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF',
-      },
-    });
+    qrCodeUrl = await generateQRCode(publicUrl);
   } catch (error) {
     console.warn('Failed to generate QR code:', error);
   }
@@ -138,10 +227,10 @@ export const createShareLink = async (
 /**
  * Validate share link access
  */
-export const validateShareAccess = (
+export const validateShareAccess = async (
   shareLink: ShareLink,
   password?: string
-): ShareAccess => {
+): Promise<ShareAccess> => {
   // Check if link is active
   if (!shareLink.isActive) {
     return {
@@ -185,7 +274,7 @@ export const validateShareAccess = (
   
   // Decrypt photo data
   try {
-    const photoData = decryptPhotoData(shareLink.encryptedUrl, shareLink.options.password);
+    const photoData = await decryptPhotoData(shareLink.encryptedUrl, shareLink.options.password);
     
     return {
       success: true,
