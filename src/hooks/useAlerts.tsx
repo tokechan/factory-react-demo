@@ -213,7 +213,8 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
         console.error('Failed to load alert config from localStorage:', error);
       }
     }
-  }, [initializeDefaultRules]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Initialize default rules
   const initializeDefaultRules = useCallback(() => {
