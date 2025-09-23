@@ -1,5 +1,5 @@
 // Sharing utilities for secure URL generation and access control
-import * as CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js';
 import { nanoid } from 'nanoid';
 import QRCode from 'qrcode';
 
@@ -28,7 +28,7 @@ export interface ShareLink {
 
 export interface ShareAccess {
   success: boolean;
-  photoData?: any;
+  photoData?: Record<string, any>;
   error?: string;
   requiresPassword?: boolean;
   viewsRemaining?: number;
@@ -36,7 +36,7 @@ export interface ShareAccess {
 }
 
 // Encryption key - in production, this should come from environment variables
-const ENCRYPTION_KEY = process.env.REACT_APP_SHARE_ENCRYPTION_KEY || 'default-key-change-in-production';
+const ENCRYPTION_KEY = (process.env.REACT_APP_SHARE_ENCRYPTION_KEY as string) || 'default-key-change-in-production';
 
 /**
  * Generate a secure share token
@@ -55,7 +55,7 @@ export const generateShareId = (): string => {
 /**
  * Encrypt photo data for secure sharing
  */
-export const encryptPhotoData = (photoData: any, password?: string): string => {
+export const encryptPhotoData = (photoData: Record<string, any>, password?: string): string => {
   const dataString = JSON.stringify(photoData);
   const key = password ? CryptoJS.SHA256(password).toString() : ENCRYPTION_KEY;
   return CryptoJS.AES.encrypt(dataString, key).toString();
@@ -64,7 +64,7 @@ export const encryptPhotoData = (photoData: any, password?: string): string => {
 /**
  * Decrypt photo data for access
  */
-export const decryptPhotoData = (encryptedData: string, password?: string): any => {
+export const decryptPhotoData = (encryptedData: string, password?: string): Record<string, any> => {
   try {
     const key = password ? CryptoJS.SHA256(password).toString() : ENCRYPTION_KEY;
     const bytes = CryptoJS.AES.decrypt(encryptedData, key);
@@ -80,7 +80,7 @@ export const decryptPhotoData = (encryptedData: string, password?: string): any 
  */
 export const createShareLink = async (
   photoId: string,
-  photoData: any,
+  photoData: Record<string, any>,
   options: ShareOptions = {},
   createdBy: string
 ): Promise<ShareLink> => {
@@ -91,7 +91,9 @@ export const createShareLink = async (
   const encryptedUrl = encryptPhotoData(photoData, options.password);
   
   // Generate public URL
-  const baseUrl = window.location.origin;
+  const baseUrl = (typeof window !== 'undefined' && window.location) 
+    ? window.location.origin 
+    : 'http://localhost:3005';
   const publicUrl = `${baseUrl}/share/${shareId}`;
   
   // Generate QR code
@@ -226,7 +228,7 @@ export const deactivateShareLink = (shareLink: ShareLink): ShareLink => {
  */
 export const generateQuickShare = async (
   photoId: string,
-  photoData: any,
+  photoData: Record<string, any>,
   createdBy: string
 ): Promise<ShareLink> => {
   const defaultOptions: ShareOptions = {
@@ -245,7 +247,7 @@ export const generateQuickShare = async (
  */
 export const generateSecureShare = async (
   photoId: string,
-  photoData: any,
+  photoData: Record<string, any>,
   password: string,
   maxViews: number,
   expiresInHours: number,
@@ -317,10 +319,10 @@ export const formatShareInfo = (shareLink: ShareLink): string => {
  */
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
-    if (navigator.clipboard && window.isSecureContext) {
+    if (typeof window !== 'undefined' && navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
-    } else {
+    } else if (typeof document !== 'undefined') {
       // Fallback for older browsers or non-secure contexts
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -332,6 +334,7 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
       document.body.removeChild(textArea);
       return success;
     }
+    return false;
   } catch (error) {
     console.error('Failed to copy to clipboard:', error);
     return false;
@@ -347,7 +350,7 @@ export const shareViaWebShareAPI = async (
   url: string
 ): Promise<boolean> => {
   try {
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       await navigator.share({
         title,
         text,
