@@ -64,9 +64,26 @@ const LoginPage: React.FC = () => {
       
       // Navigation will be handled by useEffect after successful login
     } catch (error: any) {
+      console.error('Login error:', error);
+      
+      // APIエラーの詳細を解析
+      let errorMessage = 'メールアドレスまたはパスワードが正しくありません';
+      
+      if (error.message) {
+        if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+          errorMessage = '接続エラーが発生しました。ページを再読み込みして再度お試しください。';
+        } else if (error.message.includes('Invalid email') || error.message.includes('Invalid password')) {
+          errorMessage = 'メールアドレスまたはパスワードの形式が正しくありません。';
+        } else if (error.message.includes('User not found') || error.message.includes('Invalid credentials')) {
+          errorMessage = 'メールアドレスまたはパスワードが正しくありません。';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       showError(
         'ログインに失敗しました',
-        error.message || 'メールアドレスまたはパスワードが正しくありません'
+        errorMessage
       );
     } finally {
       setIsSubmitting(false);

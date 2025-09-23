@@ -79,17 +79,29 @@ const RegisterPage: React.FC = () => {
       
       // Navigation will be handled by useEffect after successful registration
     } catch (error: any) {
-      if (error.message?.includes('already exists')) {
-        showError(
-          '登録に失敗しました',
-          'このメールアドレスは既に使用されています'
-        );
-      } else {
-        showError(
-          '登録に失敗しました',
-          error.message || '登録中にエラーが発生しました'
-        );
+      console.error('Registration error:', error);
+      
+      // APIエラーの詳細を解析
+      let errorMessage = '登録中にエラーが発生しました';
+      
+      if (error.message) {
+        if (error.message.includes('already exists')) {
+          errorMessage = 'このメールアドレスは既に使用されています';
+        } else if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+          errorMessage = '接続エラーが発生しました。ページを再読み込みして再度お試しください。';
+        } else if (error.message.includes('password')) {
+          errorMessage = 'パスワードの形式が正しくありません。8文字以上で英数字を含めてください。';
+        } else if (error.message.includes('email')) {
+          errorMessage = 'メールアドレスの形式が正しくありません。';
+        } else {
+          errorMessage = error.message;
+        }
       }
+      
+      showError(
+        '登録に失敗しました',
+        errorMessage
+      );
     } finally {
       setIsSubmitting(false);
     }
