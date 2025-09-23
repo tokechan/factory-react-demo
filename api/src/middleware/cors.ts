@@ -5,14 +5,21 @@ import type { Env } from '../types';
  * CORS middleware with configurable origins
  */
 export async function corsMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
-  // Temporary fix: Allow all origins for development
+  // Fix: Specific origin when using credentials
   const origin = c.req.header('Origin');
-  c.header('Access-Control-Allow-Origin', origin || '*');
+  
+  // Set specific origin or disable credentials for *
+  if (origin && (origin.includes('pages.dev') || origin.includes('localhost'))) {
+    c.header('Access-Control-Allow-Origin', origin);
+    c.header('Access-Control-Allow-Credentials', 'true');
+  } else {
+    c.header('Access-Control-Allow-Origin', '*');
+    // Note: Cannot use credentials with *
+  }
   
   c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   c.header('Access-Control-Max-Age', '86400'); // 24 hours
-  c.header('Access-Control-Allow-Credentials', 'true');
   
   // Handle preflight OPTIONS requests
   if (c.req.method === 'OPTIONS') {

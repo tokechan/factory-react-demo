@@ -98,6 +98,7 @@ const RegisterPage: React.FC = () => {
         }
       }
       
+      console.log('Showing error notification:', errorMessage);
       showError(
         '登録に失敗しました',
         errorMessage
