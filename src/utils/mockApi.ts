@@ -36,6 +36,7 @@ let mockPhotos: Photo[] = [
   {
     id: 'photo-1',
     filename: 'sunset-beach.jpg',
+    name: 'Beautiful Sunset at Beach',
     file_size: 2048576,
     content_type: 'image/jpeg',
     upload_date: '2024-09-20T10:30:00Z',
@@ -53,10 +54,33 @@ let mockPhotos: Photo[] = [
     original_access_count: 2,
     thumb_url: 'https://picsum.photos/200/200?random=1',
     medium_url: 'https://picsum.photos/800/600?random=1',
+    url: 'https://picsum.photos/800/600?random=1',
+    width: 800,
+    height: 600,
+    size: 2048576,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-20T18:25:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-20T18:25:00Z',
+        camera_model: 'iPhone 15 Pro',
+        iso: '100',
+        aperture: 'f/1.8',
+        shutter_speed: '1/120',
+        focal_length: '26mm'
+      },
+      location: {
+        latitude: 35.6762,
+        longitude: 139.6503
+      }
+    }
   },
   {
     id: 'photo-2',
     filename: 'mountain-view.jpg',
+    name: 'Majestic Mountain View',
     file_size: 3145728,
     content_type: 'image/jpeg',
     upload_date: '2024-09-19T14:15:00Z',
@@ -71,10 +95,29 @@ let mockPhotos: Photo[] = [
     original_access_count: 1,
     thumb_url: 'https://picsum.photos/200/200?random=2',
     medium_url: 'https://picsum.photos/800/600?random=2',
+    url: 'https://picsum.photos/800/600?random=2',
+    width: 800,
+    height: 600,
+    size: 3145728,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-19T09:45:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-19T09:45:00Z',
+        camera_model: 'Canon EOS R5',
+        iso: '200',
+        aperture: 'f/2.8',
+        shutter_speed: '1/250',
+        focal_length: '85mm'
+      }
+    }
   },
   {
     id: 'photo-3',
     filename: 'city-night.jpg',
+    name: 'City Night Lights',
     file_size: 1572864,
     content_type: 'image/jpeg',
     upload_date: '2024-09-18T20:00:00Z',
@@ -90,10 +133,29 @@ let mockPhotos: Photo[] = [
     original_access_count: 0,
     thumb_url: 'https://picsum.photos/200/200?random=3',
     medium_url: 'https://picsum.photos/800/600?random=3',
+    url: 'https://picsum.photos/800/600?random=3',
+    width: 800,
+    height: 600,
+    size: 1572864,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-18T21:30:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-18T21:30:00Z',
+        camera_model: 'Sony α7R V',
+        iso: '800',
+        aperture: 'f/1.4',
+        shutter_speed: '1/30',
+        focal_length: '35mm'
+      }
+    }
   },
   {
     id: 'photo-4',
     filename: 'forest-hiking.jpg',
+    name: 'Forest Hiking Trail',
     file_size: 4194304,
     content_type: 'image/jpeg',
     upload_date: '2024-09-15T08:45:00Z',
@@ -110,10 +172,33 @@ let mockPhotos: Photo[] = [
     original_access_count: 3,
     thumb_url: 'https://picsum.photos/200/200?random=4',
     medium_url: 'https://picsum.photos/800/600?random=4',
+    url: 'https://picsum.photos/800/600?random=4',
+    width: 800,
+    height: 600,
+    size: 4194304,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-15T08:30:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-15T08:30:00Z',
+        camera_model: 'Nikon D850',
+        iso: '100',
+        aperture: 'f/8',
+        shutter_speed: '1/125',
+        focal_length: '24mm'
+      },
+      location: {
+        latitude: 36.5583,
+        longitude: 138.9133
+      }
+    }
   },
   {
     id: 'photo-5',
     filename: 'coffee-shop.jpg',
+    name: 'Cozy Coffee Shop',
     file_size: 1048576,
     content_type: 'image/jpeg',
     upload_date: '2024-09-10T15:20:00Z',
@@ -129,10 +214,29 @@ let mockPhotos: Photo[] = [
     original_access_count: 0,
     thumb_url: 'https://picsum.photos/200/200?random=5',
     medium_url: 'https://picsum.photos/800/600?random=5',
+    url: 'https://picsum.photos/800/600?random=5',
+    width: 800,
+    height: 600,
+    size: 1048576,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-10T15:15:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-10T15:15:00Z',
+        camera_model: 'iPhone 14 Pro',
+        iso: '125',
+        aperture: 'f/1.8',
+        shutter_speed: '1/60',
+        focal_length: '26mm'
+      }
+    }
   },
   {
     id: 'photo-6',
     filename: 'festival-fireworks.jpg',
+    name: 'Festival Fireworks Display',
     file_size: 5242880,
     content_type: 'image/jpeg',
     upload_date: '2024-09-05T21:30:00Z',
@@ -147,10 +251,29 @@ let mockPhotos: Photo[] = [
     original_access_count: 4,
     thumb_url: 'https://picsum.photos/200/200?random=6',
     medium_url: 'https://picsum.photos/800/600?random=6',
+    url: 'https://picsum.photos/800/600?random=6',
+    width: 800,
+    height: 600,
+    size: 5242880,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-09-05T21:25:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-09-05T21:25:00Z',
+        camera_model: 'Sony α7 IV',
+        iso: '1600',
+        aperture: 'f/2.8',
+        shutter_speed: '4s',
+        focal_length: '70mm'
+      }
+    }
   },
   {
     id: 'photo-7',
     filename: 'family-picnic.jpg',
+    name: 'Family Picnic in the Park',
     file_size: 2621440,
     content_type: 'image/jpeg',
     upload_date: '2024-08-28T12:00:00Z',
@@ -168,10 +291,33 @@ let mockPhotos: Photo[] = [
     original_access_count: 1,
     thumb_url: 'https://picsum.photos/200/200?random=7',
     medium_url: 'https://picsum.photos/800/600?random=7',
+    url: 'https://picsum.photos/800/600?random=7',
+    width: 800,
+    height: 600,
+    size: 2621440,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-08-28T11:45:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-08-28T11:45:00Z',
+        camera_model: 'Canon EOS R6',
+        iso: '100',
+        aperture: 'f/5.6',
+        shutter_speed: '1/125',
+        focal_length: '50mm'
+      },
+      location: {
+        latitude: 35.6895,
+        longitude: 139.6917
+      }
+    }
   },
   {
     id: 'photo-8',
     filename: 'tokyo-skyline.jpg',
+    name: 'Tokyo Skyline at Sunset',
     file_size: 6291456,
     content_type: 'image/jpeg',
     upload_date: '2024-08-20T19:45:00Z',
@@ -188,10 +334,33 @@ let mockPhotos: Photo[] = [
     original_access_count: 8,
     thumb_url: 'https://picsum.photos/200/200?random=8',
     medium_url: 'https://picsum.photos/800/600?random=8',
+    url: 'https://picsum.photos/800/600?random=8',
+    width: 800,
+    height: 600,
+    size: 6291456,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-08-20T19:30:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-08-20T19:30:00Z',
+        camera_model: 'Fujifilm X-T5',
+        iso: '400',
+        aperture: 'f/8',
+        shutter_speed: '1/60',
+        focal_length: '35mm'
+      },
+      location: {
+        latitude: 35.6762,
+        longitude: 139.6503
+      }
+    }
   },
   {
     id: 'photo-9',
     filename: 'cherry-blossoms.jpg',
+    name: 'Spring Cherry Blossoms',
     file_size: 3670016,
     content_type: 'image/jpeg',
     upload_date: '2024-04-05T10:15:00Z',
@@ -209,10 +378,33 @@ let mockPhotos: Photo[] = [
     original_access_count: 10,
     thumb_url: 'https://picsum.photos/200/200?random=9',
     medium_url: 'https://picsum.photos/800/600?random=9',
+    url: 'https://picsum.photos/800/600?random=9',
+    width: 800,
+    height: 600,
+    size: 3670016,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-04-05T10:00:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-04-05T10:00:00Z',
+        camera_model: 'iPhone 15 Pro Max',
+        iso: '100',
+        aperture: 'f/1.8',
+        shutter_speed: '1/120',
+        focal_length: '26mm'
+      },
+      location: {
+        latitude: 35.7148,
+        longitude: 139.7967
+      }
+    }
   },
   {
     id: 'photo-10',
     filename: 'winter-landscape.jpg',
+    name: 'Winter Mountain Landscape',
     file_size: 4456448,
     content_type: 'image/jpeg',
     upload_date: '2024-01-15T13:20:00Z',
@@ -230,6 +422,28 @@ let mockPhotos: Photo[] = [
     original_access_count: 2,
     thumb_url: 'https://picsum.photos/200/200?random=10',
     medium_url: 'https://picsum.photos/800/600?random=10',
+    url: 'https://picsum.photos/800/600?random=10',
+    width: 800,
+    height: 600,
+    size: 4456448,
+    allowDownload: true,
+    allowZoom: true,
+    watermark: false,
+    taken_at: '2024-01-15T13:10:00Z',
+    metadata: {
+      exif: {
+        date_taken: '2024-01-15T13:10:00Z',
+        camera_model: 'Canon EOS R5',
+        iso: '100',
+        aperture: 'f/11',
+        shutter_speed: '1/250',
+        focal_length: '24mm'
+      },
+      location: {
+        latitude: 36.7372,
+        longitude: 137.9841
+      }
+    }
   },
 ];
 
@@ -522,6 +736,7 @@ export class MockApiClient {
     const newPhoto: Photo = {
       id: photoId,
       filename: `uploaded-${Date.now()}.jpg`,
+      name: `New Photo ${Date.now()}`,
       file_size: actualSize,
       content_type: 'image/jpeg',
       upload_date: new Date().toISOString(),
@@ -530,6 +745,20 @@ export class MockApiClient {
       original_access_count: 0,
       thumb_url: `https://picsum.photos/200/200?random=${Date.now()}`,
       medium_url: `https://picsum.photos/800/600?random=${Date.now()}`,
+      url: `https://picsum.photos/800/600?random=${Date.now()}`,
+      width: 800,
+      height: 600,
+      size: actualSize,
+      allowDownload: true,
+      allowZoom: true,
+      watermark: false,
+      taken_at: new Date().toISOString(),
+      metadata: {
+        exif: {
+          date_taken: new Date().toISOString(),
+          camera_model: 'Mock Camera',
+        }
+      }
     };
     
     mockPhotos.unshift(newPhoto);
