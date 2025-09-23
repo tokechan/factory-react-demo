@@ -12,9 +12,6 @@ import {
   AlertStatus,
   NotificationChannel,
   DEFAULT_ALERT_RULES,
-  getAlertIcon,
-  getAlertColor,
-  formatAlertMessage,
 } from '../utils/alertSystem';
 import { nanoid } from 'nanoid';
 
@@ -154,7 +151,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [alertRules, setAlertRules] = useState<AlertRule[]>([]);
   const [alertConfig, setAlertConfig] = useState<AlertConfig>(DEFAULT_ALERT_CONFIG);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [lastEvaluationTime, setLastEvaluationTime] = useState<Date>();
   
   const { showSuccess, showWarning, showError } = useNotifications();
@@ -216,7 +213,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
         console.error('Failed to load alert config from localStorage:', error);
       }
     }
-  }, []);
+  }, [initializeDefaultRules]);
 
   // Initialize default rules
   const initializeDefaultRules = useCallback(() => {

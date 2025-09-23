@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAlerts } from '../hooks/useAlerts';
-import { AlertType, AlertSeverity, AlertStatus, getAlertIcon, getAlertColor } from '../utils/alertSystem';
+import { AlertType, AlertSeverity, AlertStatus, getAlertIcon } from '../utils/alertSystem';
 import Card from '../components/Card';
 import Button from '../components/Button';
 
@@ -13,7 +13,7 @@ const AlertsPage: React.FC = () => {
     acknowledgeAlert, 
     resolveAlert, 
     dismissAlert,
-    toggleRule,
+
     updateConfig,
     requestNotificationPermission,
     getAlertStats,

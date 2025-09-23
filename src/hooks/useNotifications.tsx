@@ -43,7 +43,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     }
 
     return id;
-  }, []);
+  }, [removeNotification]);
 
   const removeNotification = useCallback((id: string): void => {
     setNotifications(prev => prev.filter(notification => notification.id !== id));

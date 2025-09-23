@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAlerts } from '../hooks/useAlerts';
-import { AlertSeverity, AlertStatus, getAlertIcon, getAlertColor } from '../utils/alertSystem';
+import { AlertSeverity, AlertStatus, getAlertIcon } from '../utils/alertSystem';
 import Button from './Button';
 
 const AlertBanner: React.FC = () => {

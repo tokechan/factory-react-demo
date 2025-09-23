@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useAlerts } from './useAlerts';
-import { MetricData, AlertType } from '../utils/alertSystem';
+import '../utils/alertSystem';
 
 // Mock API client import (in real app, import the actual API client)
 interface MockApiClient {

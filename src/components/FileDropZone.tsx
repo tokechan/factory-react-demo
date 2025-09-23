@@ -19,7 +19,6 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
   children,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
-  const [dragCounter, setDragCounter] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
