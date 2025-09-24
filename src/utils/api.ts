@@ -16,8 +16,10 @@ import type {
 import { mockApiClient } from './mockApi';
 
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8787';
-const USE_MOCK_API = process.env.REACT_APP_USE_MOCK_API === 'true' || !process.env.REACT_APP_API_URL;
+const envApiUrl = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE_URL;
+const fallbackApiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:8787';
+const API_BASE_URL = envApiUrl || fallbackApiUrl;
+const USE_MOCK_API = process.env.REACT_APP_USE_MOCK_API === 'true' || (!process.env.REACT_APP_API_URL && !process.env.REACT_APP_API_BASE_URL);
 
 class ApiClient {
   private client: AxiosInstance;
@@ -31,7 +33,6 @@ class ApiClient {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
-        'Origin': window.location.origin,
       },
     });
 

@@ -13,6 +13,23 @@ name = "photo-archive-api-prod"
 [env.staging]
 name = "photo-archive-api-staging"
 
+# Staging Environment Bindings
+[[env.staging.r2_buckets]]
+binding = "PHOTO_BUCKET"
+bucket_name = "photo-archive-bucket-prod"
+preview_bucket_name = "photo-archive-bucket-dev"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "photo-archive-db-prod"
+database_id = "fcd88226-56f4-4e89-aca8-153deb24e067"
+preview_database_id = "a67c7549-4cc3-4cde-9559-ebcf10f71db6"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "876b4063f0cc41d296aa533fe2a151e3"
+preview_id = "c1dc0e8060cc42f18c2e242673dc2fe6"
+
 # R2 Bucket Bindings
 [[r2_buckets]]
 binding = "PHOTO_BUCKET"
@@ -37,6 +54,18 @@ preview_id = "c1dc0e8060cc42f18c2e242673dc2fe6"
 ENVIRONMENT = "development"
 JWT_SECRET = "a0a321a504b79855888e5350505d9103680925177a49f66e0944c5ffd716c1e1"
 CORS_ORIGINS = "*"
+
+# Staging Environment Variables
+[env.staging.vars]
+ENVIRONMENT = "staging"
+JWT_SECRET = "a0a321a504b79855888e5350505d9103680925177a49f66e0944c5ffd716c1e1"
+CORS_ORIGINS = "https://factory-react-demo.pages.dev,https://localhost:3000"
+
+# Production Environment Variables  
+[env.production.vars]
+ENVIRONMENT = "production"
+JWT_SECRET = "a0a321a504b79855888e5350505d9103680925177a49f66e0944c5ffd716c1e1"
+CORS_ORIGINS = "https://photos.fleatoke.com"
 
 # Limits (removed cpu_ms for free plan compatibility)
 # [limits]
